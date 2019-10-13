@@ -7,10 +7,7 @@ OpenJDK Runtime Environment (build1.8.0_222-8u222-b10-1ubuntu1~18.04.1-b10)
 OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)  
 
 ## How to build
-Run the following from the `FuelLogger/` directroy:
-1. Run `javac src/fuellogger/*.java -d classes/`
-2. Run `jar cvfm obj/FuelLogger.jar META-INF/MANIFEST.MF -C classes/ .`
-3. The `FuelLogger.jar` should now be available under `obj/`
+1. Run `./build.sh` to build the app
 4. Run the app with `java -jar obj/FuelLogger.jar`
 
 The program allows you to add a new fill-up, where you provide info like:
