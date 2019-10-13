@@ -1,15 +1,15 @@
 package fuellogger;
 
-import becker.util.DateTime;
+import java.util.GregorianCalendar;
 
 public class FuelTransaction
 {
-    public final DateTime date;
+    public final GregorianCalendar date;
     public final int carMileage;
     public final double litresBought;
     public final double costPerLitre;
 	
-    public FuelTransaction(DateTime date, int carMileage, double litresBought, double costPerLitre) 
+    public FuelTransaction(GregorianCalendar date, int carMileage, double litresBought, double costPerLitre) 
     {
         this.date = date;
         this.carMileage = carMileage;
@@ -19,9 +19,9 @@ public class FuelTransaction
 
     public String getRecord()
     {
-        String year = String.valueOf(this.date.getYear());
-        String month = String.valueOf(this.date.getMonth());
-        String day = String.valueOf(this.date.getDay());
+        String year = String.valueOf(this.date.get(GregorianCalendar.YEAR));
+        String month = String.valueOf(this.date.get(GregorianCalendar.MONTH));
+        String day = String.valueOf(this.date.get(GregorianCalendar.DATE));
         if (Integer.parseInt(month) < 10) {
             month = "0" + month;
         }
@@ -34,9 +34,9 @@ public class FuelTransaction
     @Override
     public String toString() 
     {
-        String year = String.valueOf(this.date.getYear());
-        String month = String.valueOf(this.date.getMonth());
-        String day = String.valueOf(this.date.getDay());
+        String year = String.valueOf(this.date.get(GregorianCalendar.YEAR));
+        String month = String.valueOf(this.date.get(GregorianCalendar.MONTH));
+        String day = String.valueOf(this.date.get(GregorianCalendar.DATE));
         if (Integer.parseInt(month) < 10) {
             month = "0" + month;
         }

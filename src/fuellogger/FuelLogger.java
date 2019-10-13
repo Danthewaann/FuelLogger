@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.FileNotFoundException;
-import becker.util.DateTime;
+import java.util.GregorianCalendar;
 import java.io.IOException;
 
 /**
@@ -15,13 +15,14 @@ public class FuelLogger
 {
     public static void main(String[] args) 
     {
-        File transactionsFile = new File("TransactionDetails.txt");
-        Scanner consoleInput = new Scanner(System.in);
-        FuelTransaction[] transactions = loadTransactions(transactionsFile);
-
         System.out.println("-------------------------------------------------------"); 
         System.out.println("                  FUEL LOGGER PROGRAM                  "); 
         System.out.println("-------------------------------------------------------");
+
+        File transactionsFile = new File(System.getProperty("user.dir") + File.separator + "TransactionDetails.txt");
+        Scanner consoleInput = new Scanner(System.in);
+        FuelTransaction[] transactions = loadTransactions(transactionsFile);
+
         System.out.println("                   Key in number to          ");
         System.out.println("                   Select an option          ");
         System.out.println("                                       ");
@@ -47,7 +48,7 @@ public class FuelLogger
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                DateTime fillUpDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));               
+                GregorianCalendar fillUpDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));               
                 System.out.print("Car mileage: ");
                 int carMileage = consoleInput.nextInt();
                 System.out.print("Number of litres bought: ");
@@ -61,7 +62,7 @@ public class FuelLogger
                 break;
 
             case 2:
-                DateTime firstDate, secondDate;
+                GregorianCalendar firstDate, secondDate;
                 System.out.println("");
                 System.out.println("-------------------------------------------------------"); 
                 System.out.println("           FUEL QUANTITY BETWEEN TWO DATES             "); 
@@ -70,12 +71,12 @@ public class FuelLogger
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                firstDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                firstDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 System.out.println("-- Second Date -- ");
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                secondDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                secondDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 double fuelQuantity = getFuelQuantityBetweenTwoDates(transactions, firstDate, secondDate);
                 System.out.println("Fuel quantity = " + fuelQuantity);
                 break;
@@ -89,12 +90,12 @@ public class FuelLogger
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                firstDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                firstDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 System.out.println("-- Second Date -- ");
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                secondDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                secondDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 double totalCost = getTotalCostOfFuelBetweenTwoDates(transactions, firstDate, secondDate);
                 System.out.println("Total cost of fuel = " + totalCost);
                 break;
@@ -108,12 +109,12 @@ public class FuelLogger
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                firstDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                firstDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 System.out.println("-- Second Date -- ");
                 System.out.print("Date (yyyy/mm/dd): ");
                 date = consoleInput.next();
                 parts = date.split("/");
-                secondDate = new DateTime(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+                secondDate = new GregorianCalendar(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
                 FuelTransaction[] transactionsBetweenTwoDates = getListOfTransactionsBetweenTwoDates(transactions, firstDate, secondDate);
                 for (FuelTransaction t : transactionsBetweenTwoDates) {
                     if (t != null) {
@@ -128,22 +129,18 @@ public class FuelLogger
             default:
                 System.out.println("Input invalid, please try again");
                 break;
-            } 
+            }
 
-        // option 1: Add fillUp
-        // option 2: Fuel bought between two dates
-        // option 3: Cost of fuel purhcases between two dates
-        // option 4: Transaction records between two dates
-        // option 5: Exit program
-        
+        consoleInput.close();   
+        System.exit(0);
     }
     
-    private static double getFuelQuantityBetweenTwoDates(FuelTransaction[] transactions, DateTime first, DateTime second) 
+    private static double getFuelQuantityBetweenTwoDates(FuelTransaction[] transactions, GregorianCalendar first, GregorianCalendar second) 
     {
         double fuelQuantity = 0;
         for (FuelTransaction transaction : transactions) {
             if (transaction != null) {
-                if (transaction.date.isAfter(first) && transaction.date.isBefore(second)) {
+                if (transaction.date.after(first) && transaction.date.before(second)) {
                     fuelQuantity += transaction.litresBought;
                 }
             }
@@ -151,12 +148,12 @@ public class FuelLogger
         return fuelQuantity;
     }
     
-    private static double getTotalCostOfFuelBetweenTwoDates(FuelTransaction[] transactions, DateTime first, DateTime second) 
+    private static double getTotalCostOfFuelBetweenTwoDates(FuelTransaction[] transactions, GregorianCalendar first, GregorianCalendar second) 
     {
         double totalCost = 0;
         for (FuelTransaction transaction : transactions) {
             if (transaction != null) {
-                if (transaction.date.isAfter(first) && transaction.date.isBefore(second)) {
+                if (transaction.date.after(first) && transaction.date.before(second)) {
                     totalCost += transaction.litresBought * transaction.costPerLitre;
                 }
             }
@@ -164,13 +161,13 @@ public class FuelLogger
         return totalCost;
     }
     
-    private static FuelTransaction[] getListOfTransactionsBetweenTwoDates(FuelTransaction[] transactions, DateTime first, DateTime second)
+    private static FuelTransaction[] getListOfTransactionsBetweenTwoDates(FuelTransaction[] transactions, GregorianCalendar first, GregorianCalendar second)
     {
         int numOfTransactions = 0;
         FuelTransaction[] transactionsBetweenTwoDates = new FuelTransaction[transactions.length];
         for (FuelTransaction transaction : transactions) {
             if (transaction != null) {
-                if (transaction.date.isAfter(first) && transaction.date.isBefore(second)) {
+                if (transaction.date.after(first) && transaction.date.before(second)) {
                     transactionsBetweenTwoDates[numOfTransactions++] = transaction;
                 }
             }
@@ -197,33 +194,41 @@ public class FuelLogger
         FuelTransaction[] transactions = new FuelTransaction[100];
         try {
             if (transactionsFile.canRead()) {
-               in = new Scanner(transactionsFile); 
+                in = new Scanner(transactionsFile); 
+                while (in.hasNextLine()) {
+                    String line = in.nextLine();
+                    String[] lineParts = line.split(" ");
+                    if (lineParts.length == 4) { // 4 tokens per line
+                        int year = Integer.parseInt(lineParts[0].substring(0, 4));
+                        int month = Integer.parseInt(lineParts[0].substring(4, 6));
+                        int day = Integer.parseInt(lineParts[0].substring(6, 8));
+                        int carMileage = Integer.parseInt(lineParts[1]);
+                        double litresBought = Double.parseDouble(lineParts[2]);
+                        double costPerLitre = Double.parseDouble(lineParts[3]);
+                        FuelTransaction transaction = new FuelTransaction(new GregorianCalendar(year, month, day), carMileage, litresBought, costPerLitre);
+                        for (int i = 0; i < transactions.length; i++) {                        
+                            if (transactions[i] == null) {                    
+                                transactions[i] = transaction;
+                                break;
+                            }
+                        }
+                    } 
+                    else {
+                        throw new IOException("Transactions file is corrupt, should have 4 items per line!");
+                    }
+                }
             } else {
                 transactionsFile.createNewFile();
-                return transactions;
             }
         } catch(IOException f) {
             System.out.println(f.getMessage());
-            System.out.println("in " + System.getProperty("user.dir"));
+            System.out.println("Transactions file: " + transactionsFile.getAbsolutePath());
             System.exit(1);
-        }
-        while (in.hasNextLine()) {
-            String date = in.next();
-            int year = Integer.parseInt(date.substring(0, 4));
-            int month = Integer.parseInt(date.substring(4, 6));
-            int day = Integer.parseInt(date.substring(6, 8));
-            int carMileage = in.nextInt();
-            double litresBought = in.nextDouble();
-            double costPerLitre = in.nextDouble();
-            FuelTransaction transaction = new FuelTransaction(new DateTime(year, month, day), carMileage, litresBought, costPerLitre);
-            for (int i = 0; i < transactions.length; i++) {
-                if (transactions[i] == null) {                    
-                    transactions[i] = transaction;
-                    break;
-                }
+        } finally {
+            if (in != null) {
+                in.close();
             }
         }
-        in.close();
         return transactions;
     }
     
