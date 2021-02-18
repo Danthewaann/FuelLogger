@@ -1,0 +1,20 @@
+<project>
+    <target name="clean">
+        <delete dir="build" />
+    </target>
+    <target name="compile" depends="clean">
+        <mkdir dir="build" />
+        <javac srcdir="src" destdir="build" />
+    </target>
+    <target name="jar" depends="compile">
+        <mkdir dir="obj" />
+        <jar destfile="obj/FuelLogger.jar" basedir="build">
+            <manifest>
+                <attribute name="Main-Class" value="fuellogger.FuelLogger" />
+            </manifest>
+        </jar>
+    </target>
+    <target name="run" depends="jar">
+        <java jar="obj/FuelLogger.jar" fork="true" />
+    </target>
+</project>
